@@ -60,9 +60,15 @@ def download(update: Update, context: CallbackContext, media, mediatype, product
             os.remove(media_path)
         context.bot.send_message(chat_id=update.effective_chat.id, text='Here\'s your highlight!')
     elif story:
-        media_path = cl.story_download(media)
-        context.bot.send_video(chat_id=update.effective_chat.id, caption='Here\'s your story!', video=open(media_path, 'rb'))
-        os.remove(media_path)
+        user = cl.story_info(media).dict()['user']
+        user = user['username']
+        user = cl.user_id_from_username(user)
+        ids = cl.user_stories(user)
+        for i in ids:
+            media_path = cl.story_download(i[pk])
+            context.bot.send_video(chat_id=update.effective_chat.id, caption='', video=open(media_path, 'rb'))
+            os.remove(media_path)
+        context.bot.send_message(chat_id=update._effective_chat.id, text='Here\'s your story!')
 updater = Updater(creds["telegram_token"])
 updater.dispatcher.add_handler(CommandHandler('start', start))
 unknown_handler = MessageHandler(Filters.regex('(http|ftp|https):\/\/([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:\/~+#-][instagram.com]\/*[\w@?^=%&\/~+#-])'), unknown)
