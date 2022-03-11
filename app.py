@@ -51,7 +51,15 @@ def download(update: Update, context: CallbackContext, media, mediatype, product
             elif str(i).endswith('.mp4'):
                 context.bot.send_video(chat_id=update.effective_chat.id, video=open(i, 'rb'))
             os.remove(i)
-    elif highlight or story:
+        context.bot.send_message(chat_id=update._effective_chat.id, text='Here\'s your album!')
+    elif highlight:
+        ids = cl.highlight_info(media).dict()['media_ids']
+        for i in ids:
+            media_path = cl.story_download(i)
+            context.bot.send_video(chat_id=update.effective_chat.id, caption='', video=open(media_path, 'rb'))
+            os.remove(media_path)
+        context.bot.send_message(chat_id=update.effective_chat.id, text='Here\'s your highlight!')
+    elif story:
         media_path = cl.story_download(media)
         context.bot.send_video(chat_id=update.effective_chat.id, caption='Here\'s your story!', video=open(media_path, 'rb'))
         os.remove(media_path)
