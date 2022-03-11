@@ -12,6 +12,8 @@ def start(update: Update, context: CallbackContext) -> None:
 def unknown(update: Update, context: CallbackContext):
     mediatype = None
     producttype = None
+    highlight = False
+    story = False
     context.bot.send_message(chat_id=update.effective_chat.id, text="Processing...")
     if 'stories/' in update.effective_message.text:
         story = True
@@ -21,8 +23,6 @@ def unknown(update: Update, context: CallbackContext):
         else:
             media = cl.story_pk_from_url(update.message.text)
     else:
-        story = False
-        highlight = False
         media = cl.media_pk_from_url(update.message.text)
         mediatype = cl.media_info(media).dict()['media_type']
         producttype = cl.media_info(media).dict()['product_type']
