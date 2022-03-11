@@ -14,6 +14,8 @@ def unknown(update: Update, context: CallbackContext):
     media = cl.media_pk_from_url(update.message.text)
     mediatype = cl.media_info(media).dict()['media_type']
     producttype = cl.media_info(media).dict()['product_type']
+    download(update, context, media, mediatype, producttype)
+def download(update: Update, context: CallbackContext, media, mediatype, producttype):
     if mediatype == 1:
         media_path = cl.photo_download(media)
         context.bot.send_photo(chat_id=update.effective_chat.id, caption='Here\'s your photo!', photo=open(media_path, 'rb'))
