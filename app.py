@@ -22,6 +22,7 @@ def unknown(update: Update, context: CallbackContext):
             media = cl.story_pk_from_url(update.message.text)
     else:
         story = False
+        highlight = False
         media = cl.media_pk_from_url(update.message.text)
         mediatype = cl.media_info(media).dict()['media_type']
         producttype = cl.media_info(media).dict()['product_type']
