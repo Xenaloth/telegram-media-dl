@@ -65,7 +65,7 @@ def download(update: Update, context: CallbackContext, media, mediatype, product
         user = cl.user_id_from_username(user)
         ids = cl.user_stories(user)
         for i in ids:
-            media_path = cl.story_download(i[pk])
+            media_path = cl.story_download(i.dict()['pk'])
             context.bot.send_video(chat_id=update.effective_chat.id, caption='', video=open(media_path, 'rb'))
             os.remove(media_path)
         context.bot.send_message(chat_id=update._effective_chat.id, text='Here\'s your story!')
