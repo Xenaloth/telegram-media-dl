@@ -10,12 +10,23 @@ cl.login(creds["username"], creds["password"])
 def start(update: Update, context: CallbackContext) -> None:
     update.message.reply_text(f'Hello, {update.effective_user.first_name}! To use this bot, send a link to an instagram post! Note: currently only supports public accounts.')
 def unknown(update: Update, context: CallbackContext):
+    mediatype = None
+    producttype = None
     context.bot.send_message(chat_id=update.effective_chat.id, text="Processing...")
-    media = cl.media_pk_from_url(update.message.text)
-    mediatype = cl.media_info(media).dict()['media_type']
-    producttype = cl.media_info(media).dict()['product_type']
-    download(update, context, media, mediatype, producttype)
-def download(update: Update, context: CallbackContext, media, mediatype, producttype):
+    if 'stories/' in update.effective_message.text:
+        story = True
+        if '/highlights' in update.effective_message.text:
+            highlight = True
+            media = cl.highlight_pk_from_url(update.message.text)
+        else:
+            media = cl.story_pk_from_url(update.message.text)
+    else:
+        story = False
+        media = cl.media_pk_from_url(update.message.text)
+        mediatype = cl.media_info(media).dict()['media_type']
+        producttype = cl.media_info(media).dict()['product_type']
+    download(update, context, media, mediatype, producttype, story, highlight)
+def download(update: Update, context: CallbackContext, media, mediatype, producttype, story=False, highlight=False):
     if mediatype == 1:
         media_path = cl.photo_download(media)
         context.bot.send_photo(chat_id=update.effective_chat.id, caption='Here\'s your photo!', photo=open(media_path, 'rb'))
@@ -39,6 +50,10 @@ def download(update: Update, context: CallbackContext, media, mediatype, product
             elif str(i).endswith('.mp4'):
                 context.bot.send_video(chat_id=update.effective_chat.id, video=open(i, 'rb'))
             os.remove(i)
+    elif highlight or story:
+        media_path = cl.story_download(media)
+        context.bot.send_video(chat_id=update.effective_chat.id, caption='Here\'s your story!', video=open(media_path, 'rb'))
+        os.remove(media_path)
 updater = Updater(creds["telegram_token"])
 updater.dispatcher.add_handler(CommandHandler('start', start))
 unknown_handler = MessageHandler(Filters.regex('(http|ftp|https):\/\/([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:\/~+#-][instagram.com]\/*[\w@?^=%&\/~+#-])'), unknown)
