@@ -6,5 +6,5 @@ Once you have that, simply run 'python3 app.py' to run!
 
 Current features:
 - [x] Download images, videos, reels, and galleries from public accounts
-- [ ] Download stories from public accounts
+- [x] Download stories from public accounts
 - [ ] Download posts from private accounts
