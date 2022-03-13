@@ -14,19 +14,38 @@ def unknown(update: Update, context: CallbackContext):
     producttype = None
     highlight = False
     story = False
+    media = cl.media_pk_from_url(update.message.text)
+    user = cl.media_user(media).dict()
     context.bot.send_message(chat_id=update.effective_chat.id, text="Processing...")
-    if 'stories/' in update.effective_message.text:
-        story = True
-        if '/highlights' in update.effective_message.text:
-            highlight = True
-            media = cl.highlight_pk_from_url(update.message.text)
+    if checkAccountStatus(update, context, media, user) == True:
+        if 'stories/' in update.effective_message.text:
+            story = True
+            if '/highlights' in update.effective_message.text:
+                highlight = True
+                media = cl.highlight_pk_from_url(update.message.text)
+            else:
+                media = cl.story_pk_from_url(update.message.text)
         else:
-            media = cl.story_pk_from_url(update.message.text)
+            #media = cl.media_pk_from_url(update.message.text)
+            mediatype = cl.media_info(media).dict()['media_type']
+            producttype = cl.media_info(media).dict()['product_type']
+        download(update, context, media, mediatype, producttype, story, highlight)
     else:
-        media = cl.media_pk_from_url(update.message.text)
-        mediatype = cl.media_info(media).dict()['media_type']
-        producttype = cl.media_info(media).dict()['product_type']
-    download(update, context, media, mediatype, producttype, story, highlight)
+        context.bot.send_message(chat_id=update.effective_chat.id, text='This account is private! Sending a follow request')
+        cl.user_follow(user['pk'])
+def checkAccountStatus(update: Update, context: CallbackContext, media, user):
+    user = cl.media_user(media).dict()
+    selfAcc = cl.account_info().dict()
+    selfFollow = cl.user_following(selfAcc['pk']).dict()
+    print(selfFollow)
+    if user['is_private'] == True:
+        for i in selfFollow:
+            if i['pk'] == user['pk']:
+                return True
+            else:
+                return False
+    else:
+        return True
 def download(update: Update, context: CallbackContext, media, mediatype, producttype, story=False, highlight=False):
     if mediatype == 1:
         media_path = cl.photo_download(media)
