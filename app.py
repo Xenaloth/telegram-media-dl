@@ -1,6 +1,9 @@
 from instagrapi import Client
 from telegram import Update
 from telegram.ext import Updater, CommandHandler, CallbackContext, MessageHandler, Filters
+from instagrapi.exceptions import (
+    MediaNotFound
+)
 import json
 import os
 creds = open('creds.json',)
@@ -15,18 +18,28 @@ def unknown(update: Update, context: CallbackContext):
     highlight = False
     story = False
     context.bot.send_message(chat_id=update.effective_chat.id, text="Processing...")
-    if 'stories/' in update.effective_message.text:
-        story = True
-        if '/highlights' in update.effective_message.text:
-            highlight = True
-            media = cl.highlight_pk_from_url(update.message.text)
+    try:
+        if 'stories/' in update.effective_message.text:
+            story = True
+            if '/highlights' in update.effective_message.text:
+                highlight = True
+                media = cl.highlight_pk_from_url(update.message.text)
+            else:
+                media = cl.story_pk_from_url(update.message.text)
+        elif '/p/' in update.effective_message.text:
+            media = cl.media_pk_from_url(update.message.text)
+            mediatype = cl.media_info(media).dict()['media_type']
+            producttype = cl.media_info(media).dict()['product_type']
         else:
-            media = cl.story_pk_from_url(update.message.text)
-    else:
-        media = cl.media_pk_from_url(update.message.text)
-        mediatype = cl.media_info(media).dict()['media_type']
-        producttype = cl.media_info(media).dict()['product_type']
-    download(update, context, media, mediatype, producttype, story, highlight)
+            head, sep, tail = update.effective_message.text.partition('?')
+            user = head.split('/')
+            uid = cl.user_id_from_username(user[3])
+            cl.user_follow(uid)
+            context.bot.send_message(chat_id=update.effective_chat.id, text="Followed "+user[3]+"!")
+            return False
+        download(update, context, media, mediatype, producttype, story, highlight)
+    except MediaNotFound:
+        context.bot.send_message(chat_id=update.effective_chat.id, text="Could not find media! Please check the account isn't private, or if it is, send a link to the profile to automatically follow!")
 def download(update: Update, context: CallbackContext, media, mediatype, producttype, story=False, highlight=False):
     if mediatype == 1:
         media_path = cl.photo_download(media)
