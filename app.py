@@ -35,6 +35,7 @@ def unknown(update: Update, context: CallbackContext):
             user = head.split('/')
             uid = cl.user_id_from_username(user[3])
             cl.user_follow(uid)
+            context.bot.send_message(chat_id=update.effective_chat.id, text="Followed "+user[3]+"!")
             return False
         download(update, context, media, mediatype, producttype, story, highlight)
     except MediaNotFound():
