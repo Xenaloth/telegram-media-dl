@@ -38,8 +38,8 @@ def unknown(update: Update, context: CallbackContext):
             context.bot.send_message(chat_id=update.effective_chat.id, text="Followed "+user[3]+"!")
             return False
         download(update, context, media, mediatype, producttype, story, highlight)
-    except MediaNotFound():
-        context.bot.send_message(chat_id=update.effective_chat.id, text="Could not find media! Please check the account isn't private, or if it is, send a link to the profile!")
+    except MediaNotFound:
+        context.bot.send_message(chat_id=update.effective_chat.id, text="Could not find media! Please check the account isn't private, or if it is, send a link to the profile to automatically follow!")
 def download(update: Update, context: CallbackContext, media, mediatype, producttype, story=False, highlight=False):
     if mediatype == 1:
         media_path = cl.photo_download(media)
