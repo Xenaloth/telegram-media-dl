@@ -84,7 +84,7 @@ def download(update: Update, context: CallbackContext, media, mediatype, product
         context.bot.send_message(chat_id=update._effective_chat.id, text='Here\'s your story!')
 updater = Updater(creds["telegram_token"])
 updater.dispatcher.add_handler(CommandHandler('start', start))
-unknown_handler = MessageHandler(Filters.regex('(http|ftp|https):\/\/([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:\/~+#-][instagram.com]\/*[\w@?^=%&\/~+#-])'), unknown)
+unknown_handler = MessageHandler(Filters.regex('(http|ftp|https):\/\/([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:\/~+#-](instagram.com)\/*[\w@?^=%&\/~+#-])'), unknown)
 updater.dispatcher.add_handler(unknown_handler)
 updater.start_polling()
 updater.idle()
