@@ -22,13 +22,14 @@ def tiktokHandler(update: Update, context: CallbackContext):
         context.bot.send_message(chat_id=update.effective_chat.id, text="An error occured processing the TikTok.")
 def youtubeHandler(update: Update, context: CallbackContext):
     context.bot.send_message(chat_id=update.effective_chat.id, text="Processing...")
-    #try:
-    filename = youtube.downloadVideo(update.message.text)
-    context.bot.send_video(chat_id=update.effective_chat.id, video=open(filename, 'rb'))
-    context.bot.send_message(chat_id=update.effective_chat.id, text="Here's your YouTube video!")
-    os.remove("./"+filename)
-    #except:
-    #    context.bot.send_message(chat_id=update.effective_chat.id, text="An error occured processing the YouTube video.")
+    try:
+        filename = youtube.downloadVideo(update.message.text)
+        context.bot.send_video(chat_id=update.effective_chat.id, video=open(filename, 'rb'), timeout=500)
+        context.bot.send_message(chat_id=update.effective_chat.id, text="Here's your YouTube video!")
+        os.remove("./"+filename)
+    except:
+        context.bot.send_message(chat_id=update.effective_chat.id, text="An error occured processing the YouTube video.")
+        os.remove("./*.mkv")
 updater = Updater(creds["telegram_token"])
 updater.dispatcher.add_handler(CommandHandler('start', start))
 instagram_handler = MessageHandler(Filters.regex('(instagram\.com)'), instagramHandler)
