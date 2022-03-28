@@ -4,7 +4,7 @@ import tiktok,instagram,json,os
 creds = open('creds.json',)
 creds = json.load(creds)
 def start(update: Update, context: CallbackContext) -> None:
-    update.message.reply_text(f'Hello, {update.effective_user.first_name}! To use this bot, send a link to an instagram post! Note: currently only supports public tiktok accounts.')
+    update.message.reply_text(f'Hello, {update.effective_user.first_name}! To use this bot, send a link to an instagram or tiktok post! Note: currently only supports public tiktok accounts.')
 def instagramHandler(update: Update, context: CallbackContext):
     context.bot.send_message(chat_id=update.effective_chat.id, text="Processing...")
     try:
