@@ -1,4 +1,4 @@
-import os,json,random,yt_dlp
+import os,json,random
 num = 0
 
 def downloadVideo(url):
