@@ -8,3 +8,4 @@ Current features:
 - [x] Download images, videos, reels, and galleries from public accounts
 - [x] Download stories and highlights from public accounts
 - [x] Download posts from private accounts
+- [x] Download TikTok Posts (Without watermarks!)

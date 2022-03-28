@@ -6,6 +6,7 @@ from instagrapi.exceptions import (
 )
 import json
 import os
+import tiktok
 creds = open('creds.json',)
 creds = json.load(creds)
 cl = Client()
@@ -64,7 +65,7 @@ def download(update: Update, context: CallbackContext, media, mediatype, product
             elif str(i).endswith('.mp4'):
                 context.bot.send_video(chat_id=update.effective_chat.id, video=open(i, 'rb'))
             os.remove(i)
-        context.bot.send_message(chat_id=update._effective_chat.id, text='Here\'s your album!')
+        context.bot.send_message(chat_id=update.effective_chat.id, text='Here\'s your album!')
     elif highlight:
         ids = cl.highlight_info(media).dict()['media_ids']
         for i in ids:
@@ -81,10 +82,21 @@ def download(update: Update, context: CallbackContext, media, mediatype, product
             media_path = cl.story_download(i.dict()['pk'])
             context.bot.send_video(chat_id=update.effective_chat.id, caption='', video=open(media_path, 'rb'))
             os.remove(media_path)
-        context.bot.send_message(chat_id=update._effective_chat.id, text='Here\'s your story!')
+        context.bot.send_message(chat_id=update.effective_chat.id, text='Here\'s your story!')
+def tiktokHandler(update: Update, context: CallbackContext):
+    context.bot.send_message(chat_id=update.effective_chat.id, text="Processing...")
+    try:
+        filename = tiktok.downloadVideo(tiktok.getIdFromURL(update.message.text))
+        context.bot.send_video(chat_id=update.effective_chat.id, video=open(filename, 'rb'))
+        context.bot.send_message(chat_id=update.effective_chat.id, text="Here's your TikTok!")
+        os.remove("./"+filename)
+    except:
+        context.bot.send_message(chat_id=update.effective_chat.id, text="An error occured processing the TikTok.")
 updater = Updater(creds["telegram_token"])
 updater.dispatcher.add_handler(CommandHandler('start', start))
-unknown_handler = MessageHandler(Filters.regex('(http|ftp|https):\/\/([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:\/~+#-][instagram.com]\/*[\w@?^=%&\/~+#-])'), unknown)
+unknown_handler = MessageHandler(Filters.regex('(instagram\.com)'), unknown)
+tiktok_handler = MessageHandler(Filters.regex('(tiktok\.com)'), tiktokHandler)
 updater.dispatcher.add_handler(unknown_handler)
+updater.dispatcher.add_handler(tiktok_handler)
 updater.start_polling()
 updater.idle()
