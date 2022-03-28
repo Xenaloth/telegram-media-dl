@@ -1,5 +1,13 @@
 import requests,os,json,random
 def getIdFromURL(url):
+    if url.__contains__("vm.tiktok.com"):
+        req = requests.get(
+            url,
+            headers={
+                'User-Agent': 'okhttp',
+            }
+        )
+        url = req.url
     head, sep, tail = url.partition('?')
     url = head.split('/')
     return url[5]
