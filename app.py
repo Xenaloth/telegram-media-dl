@@ -5,6 +5,7 @@ creds = open('creds.json',)
 creds = json.load(creds)
 def start(update: Update, context: CallbackContext) -> None:
     update.message.reply_text(f'Hello, {update.effective_user.first_name}! To use this bot, send a link to an instagram or tiktok post! Note: currently only supports public tiktok accounts.')
+    update.message.reply_text(f'This bot also supports youtube videos! However, telegram limits bot uploads to 50mb.')
 def instagramHandler(update: Update, context: CallbackContext):
     context.bot.send_message(chat_id=update.effective_chat.id, text="Processing...")
     try:
@@ -29,7 +30,10 @@ def youtubeHandler(update: Update, context: CallbackContext):
         os.remove("./"+filename)
     except:
         context.bot.send_message(chat_id=update.effective_chat.id, text="An error occured processing the YouTube video.")
-        os.remove("./*.mkv")
+        files = os.listdir("./")
+        for f in files:
+            if not os.path.isdir(f) and ".mkv" in f:
+                os.remove(f)
 updater = Updater(creds["telegram_token"])
 updater.dispatcher.add_handler(CommandHandler('start', start))
 instagram_handler = MessageHandler(Filters.regex('(instagram\.com)'), instagramHandler)
