@@ -9,4 +9,4 @@ Current features:
 - [x] Download stories and highlights from public accounts
 - [x] Download posts from private accounts
 - [x] Download TikTok posts (without watermarks!)
-- [x] Download YouTube videos (with sponsorblock segments marked)
+- [x] Download YouTube videos (with sponsorblock segments marked) (limited to 50mb uploads unless you use a [custom api server](https://github.com/tdlib/telegram-bot-api))
