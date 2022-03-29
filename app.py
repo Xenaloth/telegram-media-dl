@@ -34,7 +34,7 @@ def youtubeHandler(update: Update, context: CallbackContext):
         for f in files:
             if not os.path.isdir(f) and ".mkv" in f:
                 os.remove(f)
-updater = Updater(creds["telegram_token"])
+updater = Updater(creds["telegram_token"], base_url='localhost:8081')
 updater.dispatcher.add_handler(CommandHandler('start', start))
 instagram_handler = MessageHandler(Filters.regex('(instagram\.com)'), instagramHandler)
 tiktok_handler = MessageHandler(Filters.regex('(tiktok\.com)'), tiktokHandler)
