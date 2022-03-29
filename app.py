@@ -11,7 +11,7 @@ def instagramHandler(update: Update, context: CallbackContext):
     try:
         instagram.getMediaType(update, context)
     except:
-        context.bot.send_message(chat_id=update.effective_chat.id, text="An error occured processing the Instagram post.")
+        context.bot.send_message(chat_id=update.effective_chat.id, text="An error occurred processing the Instagram post.")
 def tiktokHandler(update: Update, context: CallbackContext):
     context.bot.send_message(chat_id=update.effective_chat.id, text="Processing...")
     try:
@@ -20,7 +20,7 @@ def tiktokHandler(update: Update, context: CallbackContext):
         context.bot.send_message(chat_id=update.effective_chat.id, text="Here's your TikTok!")
         os.remove("./"+filename)
     except:
-        context.bot.send_message(chat_id=update.effective_chat.id, text="An error occured processing the TikTok.")
+        context.bot.send_message(chat_id=update.effective_chat.id, text="An error occurred processing the TikTok.")
 def youtubeHandler(update: Update, context: CallbackContext):
     context.bot.send_message(chat_id=update.effective_chat.id, text="Processing...")
     try:
@@ -29,11 +29,11 @@ def youtubeHandler(update: Update, context: CallbackContext):
         context.bot.send_message(chat_id=update.effective_chat.id, text="Here's your YouTube video!")
         os.remove("./"+filename)
     except:
-        context.bot.send_message(chat_id=update.effective_chat.id, text="An error occured processing the YouTube video.")
-        files = os.listdir("./")
-        for f in files:
-            if not os.path.isdir(f) and ".mkv" in f:
-                os.remove(f)
+       context.bot.send_message(chat_id=update.effective_chat.id, text="An error occurred processing the YouTube video.")
+       files = os.listdir("./")
+       for f in files:
+           if not os.path.isdir(f) and ".mkv" in f:
+               os.remove(f)
 updater = Updater(creds["telegram_token"], base_url=creds["api_url"])
 updater.dispatcher.add_handler(CommandHandler('start', start))
 instagram_handler = MessageHandler(Filters.regex('(instagram\.com)'), instagramHandler)

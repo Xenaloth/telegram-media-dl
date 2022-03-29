@@ -2,5 +2,5 @@
     "username": "",
     "password": "",
     "telegram_token": "",
-    "api_url": "https://api.telegram.org/"
+    "api_url": "https://api.telegram.org/bot"
 }
