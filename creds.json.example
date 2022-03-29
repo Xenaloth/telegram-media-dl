@@ -1,5 +1,6 @@
 {
     "username": "",
     "password": "",
-    "telegram_token": ""
+    "telegram_token": "",
+    "api_url": "https://api.telegram.org/"
 }
