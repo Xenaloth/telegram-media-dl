@@ -1,13 +1,11 @@
 import json,os
 from instagrapi import Client
-from instagrapi.exceptions import (
-    MediaNotFound
-)
 creds = open('creds.json',)
 creds = json.load(creds)
 cl = Client()
 cl.login(creds["username"], creds["password"])
 def getMediaType(update, context):
+    follow = True
     mediatype = None
     producttype = None
     highlight = False
@@ -24,16 +22,17 @@ def getMediaType(update, context):
             media = cl.media_pk_from_url(update.message.text)
             mediatype = cl.media_info(media).dict()['media_type']
             producttype = cl.media_info(media).dict()['product_type']
-        else:
-            head, sep, tail = update.effective_message.text.partition('?')
-            user = head.split('/')
-            uid = cl.user_id_from_username(user[3])
-            cl.user_follow(uid)
-            context.bot.send_message(chat_id=update.effective_chat.id, text="Followed "+user[3]+"!")
-            return False
-        download(update, context, media, mediatype, producttype, story, highlight)
-    except MediaNotFound:
-        context.bot.send_message(chat_id=update.effective_chat.id, text="Could not find media! Please check the account isn't private, or if it is, send a link to the profile to automatically follow!")
+            follow = False
+    except:
+        None
+    if(follow):
+        head, sep, tail = update.effective_message.text.partition('?')
+        user = head.split('/')
+        uid = cl.user_id_from_username(user[3])
+        cl.user_follow(uid)
+        context.bot.send_message(chat_id=update.effective_chat.id, text="Followed "+user[3]+"!")
+        return False
+    download(update, context, media, mediatype, producttype, story, highlight)
 def download(update, context, media, mediatype, producttype, story=False, highlight=False):
     if mediatype == 1:
         media_path = cl.photo_download(media)
