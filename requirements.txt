@@ -1,3 +1,5 @@
 python-telegram-bot
 instagrapi
 requests
+Pillow
+unshortenit

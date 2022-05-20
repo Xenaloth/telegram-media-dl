@@ -1,13 +1,9 @@
 import requests,os,json,random
+from unshortenit import UnshortenIt
 def getIdFromURL(url):
     if url.__contains__("vm.tiktok.com"):
-        req = requests.get(
-            url,
-            headers={
-                'User-Agent': 'okhttp',
-            }
-        )
-        url = req.url
+        us = UnshortenIt()
+        url = us.unshorten(url)
     head, sep, tail = url.partition('?')
     url = head.split('/')
     return url[5]
