@@ -7,13 +7,13 @@ def start(update: Update, context: CallbackContext) -> None:
     update.message.reply_text(f'Hello, {update.effective_user.first_name}! To use this bot, send a link to an instagram or tiktok post! Note: currently only supports public tiktok accounts.')
     update.message.reply_text(f'This bot also supports youtube videos! However, telegram limits bot uploads to 50mb.')
 def instagramHandler(update: Update, context: CallbackContext):
-    context.bot.send_message(chat_id=update.effective_chat.id, text="Processing...")
+    context.bot.send_message(chat_id=update.effective_chat.id, text="Processing Instagram...")
     try:
         instagram.getMediaType(update, context)
     except:
         context.bot.send_message(chat_id=update.effective_chat.id, text="An error occurred processing the Instagram post.")
 def tiktokHandler(update: Update, context: CallbackContext):
-    context.bot.send_message(chat_id=update.effective_chat.id, text="Processing...")
+    context.bot.send_message(chat_id=update.effective_chat.id, text="Processing TikTok...")
     try:
         filename = tiktok.downloadVideo(tiktok.getIdFromURL(update.message.text))
         context.bot.send_video(chat_id=update.effective_chat.id, video=open(filename, 'rb'))
@@ -22,7 +22,7 @@ def tiktokHandler(update: Update, context: CallbackContext):
     except:
         context.bot.send_message(chat_id=update.effective_chat.id, text="An error occurred processing the TikTok.")
 def youtubeHandler(update: Update, context: CallbackContext):
-    context.bot.send_message(chat_id=update.effective_chat.id, text="Processing...")
+    context.bot.send_message(chat_id=update.effective_chat.id, text="Processing YouTube...")
     try:
         filename = youtube.downloadVideo(update.message.text)
         context.bot.send_video(chat_id=update.effective_chat.id, video=open(filename, 'rb'), timeout=500)
