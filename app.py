@@ -11,7 +11,7 @@ def instagramHandler(update: Update, context: CallbackContext):
     try:
         instagram.getMediaType(update, context)
     except:
-        context.bot.send_message(chat_id=update.effective_chat.id, text="An error occurred processing the Instagram post.")
+        context.bot.send_message(chat_id=update.effective_chat.id, text="An error occurred processing the Instagram URL.")
 def tiktokHandler(update: Update, context: CallbackContext):
     context.bot.send_message(chat_id=update.effective_chat.id, text="Processing TikTok...")
     try:
