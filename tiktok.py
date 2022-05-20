@@ -1,7 +1,7 @@
 import requests,os,json,random
 from unshortenit import UnshortenIt
 def getIdFromURL(url):
-    if url.__contains__("vm.tiktok.com"):
+    if url.__contains__("vm.tiktok.com") or url.__contains__("tiktok.com/t/"):
         us = UnshortenIt()
         url = us.unshorten(url)
     head, sep, tail = url.partition('?')
