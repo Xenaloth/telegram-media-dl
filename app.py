@@ -1,6 +1,6 @@
 from telegram import Update
 from telegram.ext import Updater, CommandHandler, CallbackContext, MessageHandler, Filters
-import tiktok,instagram,youtube,json,os
+import tiktok,instagram,youtube,reddit,json,os
 creds = open('creds.json',)
 creds = json.load(creds)
 def start(update: Update, context: CallbackContext) -> None:
@@ -34,13 +34,19 @@ def youtubeHandler(update: Update, context: CallbackContext):
        for f in files:
            if not os.path.isdir(f) and ".mkv" in f:
                os.remove(f)
+def redditHandler(update: Update, context: CallbackContext):
+    context.bot.send_message(chat_id=update.effective_chat.id, text="Processing Reddit...")
+    media,name = reddit.download(update.message.text)
+    reddit.handleMedia(media, name, update, context)
 updater = Updater(creds["telegram_token"], base_url=creds["api_url"])
 updater.dispatcher.add_handler(CommandHandler('start', start))
 instagram_handler = MessageHandler(Filters.regex('(instagram\.com)'), instagramHandler)
 tiktok_handler = MessageHandler(Filters.regex('(tiktok\.com)'), tiktokHandler)
 youtube_handler = MessageHandler(Filters.regex('(youtube\.com|youtu\.be)'), youtubeHandler)
+reddit_handler = MessageHandler(Filters.regex('(reddit\.com|redd\.it)'), redditHandler)
 updater.dispatcher.add_handler(instagram_handler)
 updater.dispatcher.add_handler(tiktok_handler)
 updater.dispatcher.add_handler(youtube_handler)
+updater.dispatcher.add_handler(reddit_handler)
 updater.start_polling()
 updater.idle()
