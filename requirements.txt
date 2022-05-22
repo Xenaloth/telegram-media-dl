@@ -3,3 +3,4 @@ instagrapi
 requests
 Pillow
 unshortenit
+RedDownloader
