@@ -7,8 +7,9 @@ Once you have that, simply run 'python3 app.py' to run!
 Currently, only instagram has a sign in feature and it's required to sign in to use the instagram download feature at all.
 
 Current features:
-- [x] Download images, videos, reels, and galleries from public accounts
-- [x] Download stories and highlights from public accounts
-- [x] Download posts from private accounts
+- [x] Download images, videos, reels, and galleries from public Instagram accounts
+- [x] Download stories and highlights from public Instagram accounts
+- [x] Download posts from private Instagram accounts
 - [x] Download TikTok posts (without watermarks!)
 - [x] Download YouTube videos (with sponsorblock segments marked) (limited to 50mb uploads unless you use a [custom api server](https://github.com/tdlib/telegram-bot-api))
+- [x] Download Reddit images, videos and galleries
