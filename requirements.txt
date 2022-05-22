@@ -3,3 +3,5 @@ instagrapi
 requests
 Pillow
 unshortenit
+praw
+reddit-media
