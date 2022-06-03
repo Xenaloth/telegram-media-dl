@@ -15,10 +15,7 @@ def instagramHandler(update: Update, context: CallbackContext):
 def tiktokHandler(update: Update, context: CallbackContext):
     context.bot.send_message(chat_id=update.effective_chat.id, text="Processing TikTok...")
     try:
-        filename = tiktok.downloadVideo(tiktok.getIdFromURL(update.message.text))
-        context.bot.send_video(chat_id=update.effective_chat.id, video=open(filename, 'rb'))
-        context.bot.send_message(chat_id=update.effective_chat.id, text="Here's your TikTok!")
-        os.remove("./"+filename)
+        tiktok.downloadVideo(tiktok.getIdFromURL(update.message.text), update, context)
     except:
         context.bot.send_message(chat_id=update.effective_chat.id, text="An error occurred processing the TikTok.")
 def youtubeHandler(update: Update, context: CallbackContext):
